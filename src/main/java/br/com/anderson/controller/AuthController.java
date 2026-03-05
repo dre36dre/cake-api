@@ -18,43 +18,40 @@ import br.com.anderson.repository.UserRepository;
 import br.com.anderson.security.JwtService;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
-
 
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-    
-    
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    
-    
-    @PostMapping("/create")
-    public ResponseEntity<?> createUser() {
 
-        String encodedPassword = passwordEncoder.encode("123456");
+    public AuthController(AuthenticationManager authenticationManager,
+            JwtService jwtService,
+            PasswordEncoder passwordEncoder,
+            UserRepository userRepository) {
+
+this.authenticationManager = authenticationManager;
+this.jwtService = jwtService;
+this.passwordEncoder = passwordEncoder;
+this.userRepository = userRepository;
+}
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody LoginRequest request) {
+
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
 
         User user = new User();
-        user.setEmail("admin@email.com");
+        user.setEmail(request.getEmail());
         user.setPassword(encodedPassword);
-        user.setRole("ADMIN");
+        user.setRole("ADMIN"); // depois podemos melhorar isso
 
         userRepository.save(user);
 
         return ResponseEntity.ok("User created");
     }
 
-
-    
-    public AuthController(AuthenticationManager authenticationManager,
-            JwtService jwtService) {
-    	this.authenticationManager = authenticationManager;
-    	this.jwtService = jwtService;
-		this.passwordEncoder = null;
-		this.userRepository = null;
-}
-    
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 
@@ -69,4 +66,5 @@ public class AuthController {
 
         return ResponseEntity.ok(Map.of("token", token));
     }
+
 }
