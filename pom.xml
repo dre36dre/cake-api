@@ -30,7 +30,6 @@
 		<java.version>21</java.version>
 	</properties>
 	<dependencies>
-<<<<<<< HEAD
 	
 		<dependency>
     <groupId>org.springframework.boot</groupId>
@@ -57,8 +56,6 @@
     <scope>runtime</scope>
 </dependency>	
 		
-=======
->>>>>>> 2c13ec2a2feece9ad77257beb07015a809076648
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-h2console</artifactId>
@@ -87,7 +84,6 @@
 			<artifactId>spring-boot-starter-webmvc-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-<<<<<<< HEAD
 			
 		<dependency>
     <groupId>org.springframework.boot</groupId>
@@ -95,8 +91,6 @@
 </dependency>
 		
 		
-=======
->>>>>>> 2c13ec2a2feece9ad77257beb07015a809076648
 	</dependencies>
 
 	<build>
