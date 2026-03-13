@@ -18,4 +18,9 @@ public class PedidoService {
     public List<Pedido> listarPorCliente(Long clienteId) {
         return repository.findByClienteId(clienteId);
     }
+
+    public Pedido salvar(Pedido pedido) {
+        return repository.save(pedido);
+    }
+
 }

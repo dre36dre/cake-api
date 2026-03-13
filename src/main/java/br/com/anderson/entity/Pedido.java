@@ -18,7 +18,7 @@ public class Pedido {
     private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
-    private OrderStatus status;
+    private String status;
 
     private Double total;
     
@@ -50,12 +50,12 @@ public class Pedido {
 		this.createdAt = createdAt;
 	}
 
-	public OrderStatus getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(OrderStatus status) {
-		this.status = status;
+	public void setStatus(String string) {
+		this.status = string;
 	}
 
 	public Double getTotal() {
