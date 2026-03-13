@@ -31,11 +31,11 @@ public class AuthController {
             PasswordEncoder passwordEncoder,
             UserRepository userRepository) {
 
-this.authenticationManager = authenticationManager;
-this.jwtService = jwtService;
-this.passwordEncoder = passwordEncoder;
-this.userRepository = userRepository;
-}
+        this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
+        this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
+    }
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody LoginRequest request) {
@@ -55,14 +55,18 @@ this.userRepository = userRepository;
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 
+        System.out.println("Email recebido: " + request.getEmail());
+
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
+            new UsernamePasswordAuthenticationToken(
+                request.getEmail(),
+                request.getPassword()
+            )
         );
 
         String token = jwtService.generateToken(request.getEmail());
+
+        System.out.println("TOKEN: " + token);
 
         return ResponseEntity.ok(Map.of("token", token));
     }

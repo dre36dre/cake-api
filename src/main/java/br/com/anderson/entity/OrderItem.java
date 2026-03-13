@@ -22,7 +22,7 @@ public class OrderItem {
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    private Order order;
+    private Pedido order;
 
 	public Long getId() {
 		return id;
@@ -64,11 +64,11 @@ public class OrderItem {
 		this.cake = cake;
 	}
 
-	public Order getOrder() {
+	public Pedido getOrder() {
 		return order;
 	}
 
-	public void setOrder(Order order) {
+	public void setOrder(Pedido order) {
 		this.order = order;
 	}
 
