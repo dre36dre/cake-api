@@ -27,6 +27,7 @@ public class SecurityConfig {
         this.userDetailsService = userDetailsService;
     }
     
+    
 
     @Bean
     public AuthenticationManager authenticationManager(
