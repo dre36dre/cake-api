@@ -1,6 +1,6 @@
 package br.com.anderson.enums;
 
-public enum OrderStatus {
+public enum PedidoStatus {
 
 	CREATED,
 	CONFIRMED,

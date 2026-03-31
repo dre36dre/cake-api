@@ -1,38 +1,34 @@
 package br.com.anderson.entity;
 
 
-import br.com.anderson.enums.OrderStatus;
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 @Entity
-@Table(name = "orders")
 public class Pedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDateTime createdAt;
+    private Integer quantity;
 
-    @Enumerated(EnumType.STRING)
-    private String status;
+    private Double unitPrice;
 
-    private Double total;
-    
-    private LocalDateTime data;
-    
+    private Double subTotal;
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
-
-
     
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderItem> items;
+    @ManyToOne
+    @JoinColumn(name = "cake_id")
+    private Cake cake;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Pedido order;
 
 	public Long getId() {
 		return id;
@@ -42,44 +38,20 @@ public class Pedido {
 		this.id = id;
 	}
 
-	public LocalDateTime getCreatedAt() {
-		return createdAt;
+	public Integer getQuantity() {
+		return quantity;
 	}
 
-	public void setCreatedAt(LocalDateTime createdAt) {
-		this.createdAt = createdAt;
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
 	}
 
-	public String getStatus() {
-		return status;
+	public Double getUnitPrice() {
+		return unitPrice;
 	}
 
-	public void setStatus(String string) {
-		this.status = string;
-	}
-
-	public Double getTotal() {
-		return total;
-	}
-
-	public void setTotal(Double total) {
-		this.total = total;
-	}
-
-	public List<OrderItem> getItems() {
-		return items;
-	}
-
-	public void setItems(List<OrderItem> items) {
-		this.items = items;
-	}
-
-	public LocalDateTime getData() {
-		return data;
-	}
-
-	public void setData(LocalDateTime data) {
-		this.data = data;
+	public void setUnitPrice(Double unitPrice) {
+		this.unitPrice = unitPrice;
 	}
 
 	public Cliente getCliente() {
@@ -89,12 +61,39 @@ public class Pedido {
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
-	
-	
 
-    
-    
-    
-    
-    
+	public Double getSubTotal() {
+		return subTotal;
+	}
+
+	public void setSubTotal(Double subTotal) {
+		this.subTotal = subTotal;
+	}
+
+	public Cake getCake() {
+		return cake;
+	}
+
+	public void setCake(Cake cake) {
+		this.cake = cake;
+	}
+
+	public Pedido getOrder() {
+		return order;
+	}
+
+	public void setOrder(Pedido order) {
+		this.order = order;
+	}
+
+	public void setData(LocalDateTime now) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setStatus(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

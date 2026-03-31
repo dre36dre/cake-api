@@ -2,8 +2,8 @@ package br.com.anderson.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import br.com.anderson.entity.OrderItem;
+import br.com.anderson.entity.Pedido;
 
-public interface OrderItemRepository  extends JpaRepository<OrderItem, Long> {
+public interface OrderItemRepository  extends JpaRepository<Pedido, Long> {
 
 }
