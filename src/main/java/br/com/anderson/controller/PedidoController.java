@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.anderson.entity.Pedido;
+import br.com.anderson.entities.Pedido;
 import br.com.anderson.service.PedidoService;
 
 @RestController

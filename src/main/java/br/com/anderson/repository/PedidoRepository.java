@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import br.com.anderson.entity.Pedido;
+import br.com.anderson.entities.Pedido;
 
 public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 	List<Pedido> findByClienteId(Long clienteId);

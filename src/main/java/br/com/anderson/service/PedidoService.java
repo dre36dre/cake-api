@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import br.com.anderson.entity.Pedido;
+import br.com.anderson.entities.Pedido;
 import br.com.anderson.repository.PedidoRepository;
 
 @Service

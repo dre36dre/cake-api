@@ -8,13 +8,12 @@ import org.springframework.boot.context.config.ConfigDataResourceNotFoundExcepti
 import org.springframework.stereotype.Service;
 
 import br.com.anderson.dto.CakeDTO;
-import br.com.anderson.entity.Cake;
+import br.com.anderson.entities.Cake;
 import br.com.anderson.exception.ResourceNotFoundException;
 import br.com.anderson.repository.CakeRepository;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
-import br.com.anderson.entity.Cake;
 import br.com.anderson.repository.CakeRepository;
 
 @Service

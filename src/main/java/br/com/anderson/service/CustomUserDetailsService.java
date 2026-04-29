@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import br.com.anderson.entity.User;
+import br.com.anderson.entities.User;
 import br.com.anderson.repository.UserRepository;
 
 @Service

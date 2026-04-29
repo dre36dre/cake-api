@@ -1,4 +1,5 @@
 package br.com.anderson.controller;
+
 //05/03 15:52
 import java.util.Map;
 
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.anderson.dto.LoginRequest;
-import br.com.anderson.entity.User;
+import br.com.anderson.entities.User;
 import br.com.anderson.repository.UserRepository;
 import br.com.anderson.security.JwtService;
 
@@ -58,17 +59,19 @@ public class AuthController {
         System.out.println("Email recebido: " + request.getEmail());
 
         authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                request.getEmail(),
-                request.getPassword()
-            )
-        );
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword()));
 
         String token = jwtService.generateToken(request.getEmail());
 
         System.out.println("TOKEN: " + token);
 
-        return ResponseEntity.ok(Map.of("token", token));
+        // Buscar o role do usuário no banco
+        User user = userRepository.findByEmail(request.getEmail()).orElse(null);
+        String role = (user != null && user.getRole() != null) ? user.getRole().toLowerCase() : "cliente";
+
+        return ResponseEntity.ok(Map.of("token", token, "role", role));
     }
 
 }

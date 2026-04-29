@@ -1,4 +1,4 @@
-package br.com.anderson.entity;
+package br.com.anderson.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
