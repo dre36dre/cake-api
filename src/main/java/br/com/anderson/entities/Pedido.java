@@ -24,7 +24,7 @@ public class Pedido {
 
     @ManyToOne
     @JoinColumn(name = "cake_id")
-    private Cake cake;
+    private Produto produto;
 
     @ManyToOne
     @JoinColumn(name = "order_id")
@@ -70,12 +70,12 @@ public class Pedido {
 		this.subTotal = subTotal;
 	}
 
-	public Cake getCake() {
-		return cake;
+	public Produto getCake() {
+		return produto;
 	}
 
-	public void setCake(Cake cake) {
-		this.cake = cake;
+	public void setCake(Produto produto) {
+		this.produto = produto;
 	}
 
 	public Pedido getOrder() {
@@ -94,6 +94,16 @@ public class Pedido {
 	public void setStatus(String string) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public Iterable<Pedido> getItens() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Object getProduto() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
