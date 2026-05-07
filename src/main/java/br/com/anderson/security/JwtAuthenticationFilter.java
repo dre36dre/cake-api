@@ -18,25 +18,28 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtService jwtService;
+    private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
 
-    public JwtAuthenticationFilter(JwtService jwtService,
-            UserDetailsService userDetailsService) {
-        this.jwtService = jwtService;
+    public JwtAuthenticationFilter(JwtUtil jwtUtil,
+                                   UserDetailsService userDetailsService) {
+        this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain)
+                                    HttpServletResponse response,
+                                    FilterChain filterChain)
             throws ServletException, IOException {
 
-        // Libera o login e cakes (não precisa de token aqui!)
-        if (request.getServletPath().equals("/api/auth/login") ||
-                request.getServletPath().equals("/api/auth/register") ||
-                request.getServletPath().startsWith("/cakes")) {
+        // Libera login e rotas públicas
+        if (request.getServletPath().startsWith("/auth") ||
+            request.getServletPath().startsWith("/produtos") ||
+            request.getServletPath().startsWith("/cakes") ||
+            request.getServletPath().startsWith("/pedidos") ||
+            request.getServletPath().startsWith("/imagens")) {
+
             filterChain.doFilter(request, response);
             return;
         }
@@ -49,20 +52,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         final String jwt = authHeader.substring(7);
-        final String userEmail = jwtService.extractUsername(jwt);
+        final String username = jwtUtil.extractUsername(jwt);
 
-        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-            if (jwtService.isTokenValid(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities());
+            if (jwtUtil.isTokenValid(jwt, userDetails)) {
+
+                UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(
+                                userDetails,
+                                null,
+                                userDetails.getAuthorities()
+                        );
 
                 authToken.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request));
+                        new WebAuthenticationDetailsSource().buildDetails(request)
+                );
 
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }

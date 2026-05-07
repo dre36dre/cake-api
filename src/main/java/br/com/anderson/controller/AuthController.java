@@ -1,77 +1,52 @@
 package br.com.anderson.controller;
 
-//05/03 15:52
-import java.util.Map;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import br.com.anderson.dto.LoginRequest;
-import br.com.anderson.entities.User;
-import br.com.anderson.repository.UserRepository;
-import br.com.anderson.security.JwtService;
+import br.com.anderson.security.JwtUtil;
+import org.springframework.security.authentication.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
+@CrossOrigin(origins = "*") // libera para o Angular
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
-    private final JwtService jwtService;
-    private final PasswordEncoder passwordEncoder;
-    private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
 
-    public AuthController(AuthenticationManager authenticationManager,
-            JwtService jwtService,
-            PasswordEncoder passwordEncoder,
-            UserRepository userRepository) {
-
+    public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
         this.authenticationManager = authenticationManager;
-        this.jwtService = jwtService;
-        this.passwordEncoder = passwordEncoder;
-        this.userRepository = userRepository;
+        this.jwtUtil = jwtUtil;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody LoginRequest request) {
+    // DTO para receber JSON
+    public static class LoginRequest {
+        public String username;
+        public String password;
+    }
 
-        String encodedPassword = passwordEncoder.encode(request.getPassword());
+    // DTO para enviar JSON
+    public static class LoginResponse {
+        public String token;
 
-        User user = new User();
-        user.setEmail(request.getEmail());
-        user.setPassword(encodedPassword);
-        user.setRole("ADMIN"); // depois podemos melhorar isso
-
-        userRepository.save(user);
-
-        return ResponseEntity.ok("User created");
+        public LoginResponse(String token) {
+            this.token = token;
+        }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    public LoginResponse login(@RequestBody LoginRequest request) {
 
-        System.out.println("Email recebido: " + request.getEmail());
-
-        authenticationManager.authenticate(
+        Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()));
+                        request.username,
+                        request.password
+                )
+        );
 
-        String token = jwtService.generateToken(request.getEmail());
+        UserDetails user = (UserDetails) auth.getPrincipal();
+        String token = jwtUtil.generateToken(user);
 
-        System.out.println("TOKEN: " + token);
-
-        // Buscar o role do usuário no banco
-        User user = userRepository.findByEmail(request.getEmail()).orElse(null);
-        String role = (user != null && user.getRole() != null) ? user.getRole().toLowerCase() : "cliente";
-
-        return ResponseEntity.ok(Map.of("token", token, "role", role));
+        return new LoginResponse(token);
     }
-
 }

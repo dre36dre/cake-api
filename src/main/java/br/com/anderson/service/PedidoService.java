@@ -1,6 +1,7 @@
 package br.com.anderson.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -15,8 +16,8 @@ public class PedidoService {
         this.repository = repository;
     }
 
-    public List<Pedido> listarPorCliente(Long clienteId) {
-        return repository.findByClienteId(clienteId);
+    public Optional<Pedido> listarPorCliente(Long clienteId) {
+        return repository.findById(clienteId);
     }
 
     public Pedido salvar(Pedido pedido) {

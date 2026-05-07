@@ -1,9 +1,15 @@
 package br.com.anderson.entities;
 
-
 import java.time.LocalDateTime;
+import java.util.List;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Pedido {
@@ -12,98 +18,40 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer quantity;
+    // Dados do cliente
+    private String nomeCliente;
+    private String telefoneCliente;
+    private String enderecoCliente;
 
-    private Double unitPrice;
+    // Total do pedido
+    private Double total;
 
-    private Double subTotal;
-    @ManyToOne
-    @JoinColumn(name = "cliente_id")
-    private Cliente cliente;
-    
+    // Data e hora do pedido
+    private LocalDateTime dataHora = LocalDateTime.now();
 
-    @ManyToOne
-    @JoinColumn(name = "cake_id")
-    private Produto produto;
+    // Lista de itens do pedido
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "pedido_id")
+    private List<ItemPedido> itens;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Pedido order;
+    // Getters e setters
+    public Long getId() { return id; }
 
-	public Long getId() {
-		return id;
-	}
+    public String getNomeCliente() { return nomeCliente; }
+    public void setNomeCliente(String nomeCliente) { this.nomeCliente = nomeCliente; }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public String getTelefoneCliente() { return telefoneCliente; }
+    public void setTelefoneCliente(String telefoneCliente) { this.telefoneCliente = telefoneCliente; }
 
-	public Integer getQuantity() {
-		return quantity;
-	}
+    public String getEnderecoCliente() { return enderecoCliente; }
+    public void setEnderecoCliente(String enderecoCliente) { this.enderecoCliente = enderecoCliente; }
 
-	public void setQuantity(Integer quantity) {
-		this.quantity = quantity;
-	}
+    public Double getTotal() { return total; }
+    public void setTotal(Double total) { this.total = total; }
 
-	public Double getUnitPrice() {
-		return unitPrice;
-	}
+    public LocalDateTime getDataHora() { return dataHora; }
+    public void setDataHora(LocalDateTime dataHora) { this.dataHora = dataHora; }
 
-	public void setUnitPrice(Double unitPrice) {
-		this.unitPrice = unitPrice;
-	}
-
-	public Cliente getCliente() {
-		return cliente;
-	}
-
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
-	}
-
-	public Double getSubTotal() {
-		return subTotal;
-	}
-
-	public void setSubTotal(Double subTotal) {
-		this.subTotal = subTotal;
-	}
-
-	public Produto getCake() {
-		return produto;
-	}
-
-	public void setCake(Produto produto) {
-		this.produto = produto;
-	}
-
-	public Pedido getOrder() {
-		return order;
-	}
-
-	public void setOrder(Pedido order) {
-		this.order = order;
-	}
-
-	public void setData(LocalDateTime now) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void setStatus(String string) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public Iterable<Pedido> getItens() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Object getProduto() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+    public List<ItemPedido> getItens() { return itens; }
+    public void setItens(List<ItemPedido> itens) { this.itens = itens; }
 }

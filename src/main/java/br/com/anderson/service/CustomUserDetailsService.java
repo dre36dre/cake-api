@@ -1,34 +1,31 @@
 package br.com.anderson.service;
 
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
-
-import br.com.anderson.entities.User;
+import br.com.anderson.entities.Usuario;
 import br.com.anderson.repository.UserRepository;
-
+import org.springframework.security.core.userdetails.*;
+import org.springframework.stereotype.Service;
+import org.springframework.security.core.userdetails.UserDetailsService;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserRepository repository;
-
-    public CustomUserDetailsService(UserRepository repository) {
-        this.repository = repository;
+    private final UserRepository userRepository;
+    
+    public CustomUserDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email)
-            throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Usuario usuario = userRepository.findByUsername(username);
 
-        User user = repository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        if (usuario == null) {
+            throw new UsernameNotFoundException("Usuário não encontrado");
+        }
 
-        return org.springframework.security.core.userdetails.User
-                .builder()
-                .username(user.getEmail())
-                .password(user.getPassword())
-                .roles(user.getRole().replace("ROLE_", ""))
+        return User.builder()
+                .username(usuario.getUsername())
+                .password(usuario.getPassword())
+                .roles(usuario.getRole())
                 .build();
     }
 }

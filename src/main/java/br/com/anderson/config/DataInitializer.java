@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import br.com.anderson.entities.User;
+import br.com.anderson.entities.Usuario;
 import br.com.anderson.repository.UserRepository;
 
 @Configuration
@@ -16,17 +16,16 @@ public class DataInitializer {
                                    PasswordEncoder passwordEncoder) {
         return args -> {
 
-            if (repository.findByEmail("admin@email.com").isEmpty()) {
+            if (repository.findByUsername("admin") == null) {
 
-                User user = new User();
-                user.setEmail("admin@email.com");
-                user.setName("Admin");
-                user.setPassword(passwordEncoder.encode("123456"));
+                Usuario user = new Usuario();
+                user.setUsername("admin");
                 user.setRole("ADMIN");
+                user.setPassword(passwordEncoder.encode("confeitaria123#"));
 
                 repository.save(user);
 
-                System.out.println("Usuário admin criado!");
+                System.out.println("Usuário admin criado com sucesso!");
             }
         };
     }
