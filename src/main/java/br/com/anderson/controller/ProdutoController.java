@@ -11,7 +11,7 @@ import br.com.anderson.entities.Produto;
 import br.com.anderson.service.ProdutoService;
 import jakarta.validation.Valid;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/produtos")
 public class ProdutoController {
