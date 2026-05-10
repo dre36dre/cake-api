@@ -36,7 +36,7 @@ public class ProdutoController {
     }
 
     // Listar produtos
-    @GetMapping
+    @GetMapping(produces = "application/json")
     public List<Produto> listAll() {
         return service.findAll();
     }
