@@ -2,24 +2,25 @@ package br.com.anderson.service;
 
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import br.com.anderson.dto.CakeDTO;
 import br.com.anderson.entities.Produto;
 import br.com.anderson.exception.ResourceNotFoundException;
 import br.com.anderson.repository.ProdutoRepository;
-import jakarta.validation.Valid;
-import org.springframework.stereotype.Service;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 
-import br.com.anderson.repository.ProdutoRepository;
 
 @Service
 public class ProdutoService {
 
     private final ProdutoRepository repository;
+	private LocalDateTime updatedAt;
+	private LocalDateTime createdAt;
 
     public ProdutoService(ProdutoRepository repository) {
         this.repository = repository;
@@ -50,18 +51,20 @@ public class ProdutoService {
         repository.deleteById(id);
     }
 
-    public Produto update(Long id, Produto updatedCake) {
-
+    public Produto update(Long id, Produto updatedProduto) {
         Produto existing = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Produto not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Produto not found"));
 
-        existing.setName(updatedCake.getName());
-        existing.setDescription(updatedCake.getDescription());
-        existing.setPrice(updatedCake.getPrice());
-        existing.setAvailable(updatedCake.getAvailable());
+        existing.setName(updatedProduto.getName());
+        existing.setDescription(updatedProduto.getDescription());
+        existing.setPrice(updatedProduto.getPrice());
+        existing.setAvailable(updatedProduto.getAvailable());
+        existing.setImageUrl(updatedProduto.getImageUrl());
+        existing.setUpdatedAt(updatedProduto.getUpdatedAt());
 
         return repository.save(existing);
     }
+
 
     public Produto fromDTO(CakeDTO dto) {
         Produto produto = new Produto();
@@ -70,4 +73,16 @@ public class ProdutoService {
         produto.setPrice(dto.getPrice());
         return produto;
     }
+    
+    @PrePersist
+    public void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
 }
