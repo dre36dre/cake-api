@@ -2,6 +2,7 @@ package br.com.anderson.service;
 
 
 import java.math.BigDecimal;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -32,8 +33,15 @@ public class ProdutoService {
             throw new IllegalArgumentException("Price cannot be negative");
         }
 
+        // Corrige o caminho da imagem
+        if (produto.getImageUrl() != null && !produto.getImageUrl().startsWith("/imagens/")) {
+            String nomeArquivo = Paths.get(produto.getImageUrl()).getFileName().toString();
+            produto.setImageUrl("/imagens/" + nomeArquivo);
+        }
+
         return repository.save(produto);
     }
+
 
     public List<Produto> findAll() {
         return repository.findAll();
@@ -59,11 +67,18 @@ public class ProdutoService {
         existing.setDescription(updatedProduto.getDescription());
         existing.setPrice(updatedProduto.getPrice());
         existing.setAvailable(updatedProduto.getAvailable());
-        existing.setImageUrl(updatedProduto.getImageUrl());
-        existing.setUpdatedAt(updatedProduto.getUpdatedAt());
+
+        // Corrige o caminho da imagem
+        if (updatedProduto.getImageUrl() != null && !updatedProduto.getImageUrl().startsWith("/imagens/")) {
+            String nomeArquivo = Paths.get(updatedProduto.getImageUrl()).getFileName().toString();
+            existing.setImageUrl("/imagens/" + nomeArquivo);
+        }
+
+        existing.setUpdatedAt(LocalDateTime.now());
 
         return repository.save(existing);
     }
+
 
 
     public Produto fromDTO(CakeDTO dto) {
