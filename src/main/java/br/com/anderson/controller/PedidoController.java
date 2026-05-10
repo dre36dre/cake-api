@@ -1,5 +1,6 @@
 package br.com.anderson.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.anderson.entities.Pedido;
+import br.com.anderson.enums.PedidoStatus;
 import br.com.anderson.repository.PedidoRepository;
 
 @RestController
@@ -21,13 +23,16 @@ public class PedidoController {
     private PedidoRepository repo;
 
     @PostMapping
-    public ResponseEntity<String> receber(@RequestBody Pedido pedido) {
-        repo.save(pedido);
-        return ResponseEntity.ok("Pedido recebido");
+    public ResponseEntity<Pedido> receber(@RequestBody Pedido pedido) {
+        pedido.setDataHora(LocalDateTime.now());
+        pedido.setStatus(PedidoStatus.CONFIRMED);
+
+        Pedido salvo = repo.save(pedido);
+        return ResponseEntity.ok(salvo);
     }
 
     @GetMapping
     public List<Pedido> listar() {
-        return repo.findAll();
+        return repo.findAllByOrderByDataHoraDesc();
     }
 }

@@ -5,11 +5,14 @@ import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import br.com.anderson.enums.PedidoStatus;
 
 @Entity
 public class Pedido {
@@ -28,6 +31,9 @@ public class Pedido {
 
     // Data e hora do pedido
     private LocalDateTime dataHora = LocalDateTime.now();
+
+    @Enumerated(EnumType.STRING)
+    private PedidoStatus status = PedidoStatus.CONFIRMED;
 
     // Lista de itens do pedido
     @OneToMany(cascade = CascadeType.ALL)
@@ -51,6 +57,9 @@ public class Pedido {
 
     public LocalDateTime getDataHora() { return dataHora; }
     public void setDataHora(LocalDateTime dataHora) { this.dataHora = dataHora; }
+
+    public PedidoStatus getStatus() { return status; }
+    public void setStatus(PedidoStatus status) { this.status = status; }
 
     public List<ItemPedido> getItens() { return itens; }
     public void setItens(List<ItemPedido> itens) { this.itens = itens; }
