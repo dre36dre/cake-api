@@ -29,11 +29,11 @@ public class ProdutoController {
         this.service = service;
     }
 
-    // Criar produto
-    @PostMapping
+    @PostMapping(produces = "application/json", consumes = "application/json")
     public Produto create(@RequestBody @Valid Produto produto) {
         return service.create(produto);
     }
+
 
     // Listar produtos
     @GetMapping(produces = "application/json")
@@ -41,6 +41,19 @@ public class ProdutoController {
         return service.findAll();
     }
 
+    @PutMapping(
+    	    value = "/{id}",
+    	    produces = "application/json",
+    	    consumes = "application/json"
+    	)
+    	public Produto update(
+    	        @PathVariable Long id,
+    	        @RequestBody Produto produto) {
+    	    return service.update(id, produto);
+    	}
+
+    
+    
     // Upload de imagem
     @PostMapping("/upload")
     public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file) {
