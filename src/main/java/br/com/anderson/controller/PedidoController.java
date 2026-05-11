@@ -2,12 +2,16 @@ package br.com.anderson.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,5 +44,44 @@ public class PedidoController {
     @GetMapping
     public List<Pedido> listar() {
         return repo.findAllByOrderByDataHoraDesc();
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Pedido> atualizarStatus(
+            @PathVariable Long id,
+            @RequestBody Map<String, String> dados) {
+        return alterarStatus(id, dados);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Pedido> substituirStatus(
+            @PathVariable Long id,
+            @RequestBody Map<String, String> dados) {
+        return alterarStatus(id, dados);
+    }
+
+    private ResponseEntity<Pedido> alterarStatus(Long id, Map<String, String> dados) {
+        return repo.findById(id)
+                .map(pedido -> {
+                    PedidoStatus status = converterStatus(dados.get("status"));
+                    pedido.setStatus(status);
+
+                    Pedido atualizado = repo.save(pedido);
+                    return ResponseEntity.ok(atualizado);
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    private PedidoStatus converterStatus(String status) {
+        if (status == null) {
+            throw new IllegalArgumentException("Status nao informado");
+        }
+
+        return switch (status.trim().toUpperCase()) {
+            case "COMPLETED", "CONCLUIDO", "CONCLUÍDO" -> PedidoStatus.COMPLETED;
+            case "CANCELED", "CANCELLED", "CANCELADO" -> PedidoStatus.CANCELED;
+            case "CONFIRMED", "CONFIRMADO" -> PedidoStatus.CONFIRMED;
+            default -> PedidoStatus.valueOf(status.trim().toUpperCase());
+        };
     }
 }

@@ -4,5 +4,7 @@ public enum PedidoStatus {
 
 	CREATED,
 	CONFIRMED,
+	COMPLETED,
+	CANCELED,
 	CANCELLED
 }
