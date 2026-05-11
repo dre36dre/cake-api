@@ -33,11 +33,7 @@ public class ProdutoService {
             throw new IllegalArgumentException("Price cannot be negative");
         }
 
-        // Corrige o caminho da imagem
-        if (produto.getImageUrl() != null && !produto.getImageUrl().startsWith("/imagens/")) {
-            String nomeArquivo = Paths.get(produto.getImageUrl()).getFileName().toString();
-            produto.setImageUrl("/imagens/" + nomeArquivo);
-        }
+        normalizarImagem(produto);
 
         return repository.save(produto);
     }
@@ -68,10 +64,8 @@ public class ProdutoService {
         existing.setPrice(updatedProduto.getPrice());
         existing.setAvailable(updatedProduto.getAvailable());
 
-        // Corrige o caminho da imagem
-        if (updatedProduto.getImageUrl() != null && !updatedProduto.getImageUrl().startsWith("/imagens/")) {
-            String nomeArquivo = Paths.get(updatedProduto.getImageUrl()).getFileName().toString();
-            existing.setImageUrl("/imagens/" + nomeArquivo);
+        if (updatedProduto.getImageUrl() != null && !updatedProduto.getImageUrl().isBlank()) {
+            existing.setImageUrl(caminhoImagem(updatedProduto.getImageUrl()));
         }
 
         existing.setUpdatedAt(LocalDateTime.now());
@@ -87,6 +81,18 @@ public class ProdutoService {
         produto.setDescription(dto.getDescription());
         produto.setPrice(dto.getPrice());
         return produto;
+    }
+
+    private void normalizarImagem(Produto produto) {
+        if (produto.getImageUrl() != null && !produto.getImageUrl().isBlank()) {
+            produto.setImageUrl(caminhoImagem(produto.getImageUrl()));
+        }
+    }
+
+    private String caminhoImagem(String imageUrl) {
+        String nomeArquivo = Paths.get(imageUrl).getFileName().toString();
+
+        return "/imagens/" + nomeArquivo;
     }
     
     @PrePersist
