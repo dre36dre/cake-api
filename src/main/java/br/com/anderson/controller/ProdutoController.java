@@ -34,26 +34,19 @@ public class ProdutoController {
         return service.create(produto);
     }
 
-
     // Listar produtos
     @GetMapping(produces = "application/json")
     public List<Produto> listAll() {
         return service.findAll();
     }
 
-    @PutMapping(
-    	    value = "/{id}",
-    	    produces = "application/json",
-    	    consumes = "application/json"
-    	)
-    	public Produto update(
-    	        @PathVariable Long id,
-    	        @RequestBody Produto produto) {
-    	    return service.update(id, produto);
-    	}
+    @PutMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
+    public Produto update(
+            @PathVariable Long id,
+            @RequestBody Produto produto) {
+        return service.update(id, produto);
+    }
 
-    
-    
     // Upload de imagem
     @PostMapping("/upload")
     public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file) {
@@ -64,7 +57,7 @@ public class ProdutoController {
             Files.copy(file.getInputStream(), destino, StandardCopyOption.REPLACE_EXISTING);
 
             // URL pública que o Angular vai usar
-            String url = "/imagens/" + file.getOriginalFilename();
+            String url = "/produtos/imagens/" + file.getOriginalFilename();
 
             return ResponseEntity.ok(url);
 
