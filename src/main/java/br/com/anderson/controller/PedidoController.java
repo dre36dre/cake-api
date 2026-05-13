@@ -21,11 +21,6 @@ import br.com.anderson.entities.Pedido;
 import br.com.anderson.enums.PedidoStatus;
 import br.com.anderson.repository.PedidoRepository;
 
-@CrossOrigin(origins = {
-        "http://localhost:4200",
-        "https://leticialuizdocesartesanais-dre36dres-projects.vercel.app",
-        "https://leticialuizdocesartesanais-cuspuaxym-dre36dres-projects.vercel.app"
-})
 @RestController
 @RequestMapping("/pedidos")
 public class PedidoController {

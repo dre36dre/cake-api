@@ -29,6 +29,9 @@ public class Pedido {
     // Total do pedido
     private Double total;
 
+    // Comentário do cliente
+    private String comentarioCliente;
+
     // Data e hora do pedido
     private LocalDateTime dataHora = LocalDateTime.now();
 
@@ -41,26 +44,71 @@ public class Pedido {
     private List<ItemPedido> itens;
 
     // Getters e setters
-    public Long getId() { return id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getNomeCliente() { return nomeCliente; }
-    public void setNomeCliente(String nomeCliente) { this.nomeCliente = nomeCliente; }
+    public String getNomeCliente() {
+        return nomeCliente;
+    }
 
-    public String getTelefoneCliente() { return telefoneCliente; }
-    public void setTelefoneCliente(String telefoneCliente) { this.telefoneCliente = telefoneCliente; }
+    public void setNomeCliente(String nomeCliente) {
+        this.nomeCliente = nomeCliente;
+    }
 
-    public String getEnderecoCliente() { return enderecoCliente; }
-    public void setEnderecoCliente(String enderecoCliente) { this.enderecoCliente = enderecoCliente; }
+    public String getTelefoneCliente() {
+        return telefoneCliente;
+    }
 
-    public Double getTotal() { return total; }
-    public void setTotal(Double total) { this.total = total; }
+    public void setTelefoneCliente(String telefoneCliente) {
+        this.telefoneCliente = telefoneCliente;
+    }
 
-    public LocalDateTime getDataHora() { return dataHora; }
-    public void setDataHora(LocalDateTime dataHora) { this.dataHora = dataHora; }
+    public String getEnderecoCliente() {
+        return enderecoCliente;
+    }
 
-    public PedidoStatus getStatus() { return status; }
-    public void setStatus(PedidoStatus status) { this.status = status; }
+    public void setEnderecoCliente(String enderecoCliente) {
+        this.enderecoCliente = enderecoCliente;
+    }
 
-    public List<ItemPedido> getItens() { return itens; }
-    public void setItens(List<ItemPedido> itens) { this.itens = itens; }
+    public Double getTotal() {
+        return total;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
+    }
+
+    public String getComentarioCliente() {
+        return comentarioCliente;
+    }
+
+    public void setComentarioCliente(String comentarioCliente) {
+        this.comentarioCliente = comentarioCliente;
+    }
+
+    public LocalDateTime getDataHora() {
+        return dataHora;
+    }
+
+    public void setDataHora(LocalDateTime dataHora) {
+        this.dataHora = dataHora;
+    }
+
+    public PedidoStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(PedidoStatus status) {
+        this.status = status;
+    }
+
+    public List<ItemPedido> getItens() {
+        return itens;
+    }
+
+    public void setItens(List<ItemPedido> itens) {
+        this.itens = itens;
+    }
 }
