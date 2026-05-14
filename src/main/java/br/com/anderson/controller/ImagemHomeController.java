@@ -28,6 +28,9 @@ public class ImagemHomeController {
     @Autowired
     private ImagemHomeRepository repository;
 
+    @Autowired
+    private ImagemService imagemService;   // ✅ AGORA EXISTE
+
     @GetMapping
     public List<ImagemHome> listar() {
         return repository.findAll(Sort.by("ordem"));
