@@ -1,29 +1,52 @@
 package br.com.anderson.controller;
 
+import java.nio.file.*;
 
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.core.io.*;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import br.com.anderson.service.ImagemService;
 
 @RestController
 @RequestMapping("/imagens")
+@CrossOrigin(origins = "*")
 public class ImagemController {
 
-    @GetMapping("/{nome:.+}")
-    public ResponseEntity<Resource> imagem(@PathVariable String nome) {
-        ClassPathResource imagem = new ClassPathResource("static/imagens/" + nome);
+    private final ImagemService imagemService;
 
-        if (!imagem.exists()) {
-            return ResponseEntity.notFound().build();
+    public ImagemController(ImagemService imagemService) {
+        this.imagemService = imagemService;
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file) {
+        try {
+            String nome = imagemService.salvar(file);
+            String url = "/imagens/" + nome;
+            return ResponseEntity.ok(url);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Erro: " + e.getMessage());
         }
+    }
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.IMAGE_JPEG)
-                .body(imagem);
+    @GetMapping("/{nome}")
+    public ResponseEntity<Resource> getImagem(@PathVariable String nome) {
+        try {
+            Path caminho = imagemService.carregar(nome);
+            Resource resource = new UrlResource(caminho.toUri());
+
+            if (!resource.exists()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            return ResponseEntity.ok()
+                    .contentType(MediaTypeFactory.getMediaType(nome).orElse(MediaType.IMAGE_JPEG))
+                    .body(resource);
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }
