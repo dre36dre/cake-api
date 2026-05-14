@@ -24,7 +24,7 @@ public class ImagemController {
     public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file) {
         try {
             String nome = imagemService.salvar(file);
-            String url = "/imagens/" + nome;
+            String url = "https://cake-api-production.up.railway.app/imagens/" + nome;
             return ResponseEntity.ok(url);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Erro: " + e.getMessage());
