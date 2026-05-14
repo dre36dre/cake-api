@@ -24,33 +24,25 @@ import br.com.anderson.service.ImagemService;
 @RequestMapping("/imagens-home")
 @CrossOrigin("*")
 public class ImagemHomeController {
-	
-	@Autowired
-	private ImagemHomeRepository repository;
-	
-	@Autowired
-	private ImagemService imagemService;
 
-	
-	@PostMapping("/upload")
-	public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file ){
-		String nome= imagemService.salvar(file);
-		String url = "https://cake-api-production.up.railway.app/imagens/" + nome;
+    @Autowired
+    private ImagemHomeRepository repository;
 
-		
-		return ResponseEntity.ok(url);
-	}
-	
-	@PutMapping
-	public ImagemHome atualizar(@PathVariable Long id, @RequestBody ImagemHome img) {
-		img.setId(id);
-		return repository.save(img);
-	}
-	
-	
-	@GetMapping
-	public List<ImagemHome> listar(){
-		return repository.findAll(Sort.by("order"));
-	}
-	
+    @GetMapping
+    public List<ImagemHome> listar() {
+        return repository.findAll(Sort.by("ordem"));
+    }
+
+    @PutMapping("/{id}")
+    public ImagemHome atualizar(@PathVariable Long id, @RequestBody ImagemHome img) {
+        img.setId(id);
+        return repository.save(img);
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file) {
+        String nome = imagemService.salvar(file);
+        String url = "https://cake-api-production.up.railway.app/imagens/" + nome;
+        return ResponseEntity.ok(url);
+    }
 }
