@@ -4,21 +4,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.*;
 
 import br.com.anderson.entities.ImagemHome;
 import br.com.anderson.repository.ImagemHomeRepository;
-import br.com.anderson.service.ImagemService;
 
 @RestController
 @RequestMapping("/imagens-home")
@@ -28,12 +17,14 @@ public class ImagemHomeController {
     @Autowired
     private ImagemHomeRepository repository;
 
-    @Autowired
-    private ImagemService imagemService;   // ✅ AGORA EXISTE
-
     @GetMapping
     public List<ImagemHome> listar() {
         return repository.findAll(Sort.by("ordem"));
+    }
+
+    @PostMapping
+    public ImagemHome salvar(@RequestBody ImagemHome img) {
+        return repository.save(img);
     }
 
     @PutMapping("/{id}")
@@ -42,10 +33,8 @@ public class ImagemHomeController {
         return repository.save(img);
     }
 
-    @PostMapping("/upload")
-    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file) {
-        String nome = imagemService.salvar(file);
-        String url = "https://cake-api-production.up.railway.app/imagens/" + nome;
-        return ResponseEntity.ok(url);
+    @DeleteMapping("/{id}")
+    public void excluir(@PathVariable Long id) {
+        repository.deleteById(id);
     }
 }

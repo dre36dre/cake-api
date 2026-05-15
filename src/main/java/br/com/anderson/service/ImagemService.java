@@ -1,9 +1,7 @@
 package br.com.anderson.service;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,7 +16,7 @@ public class ImagemService {
             Files.createDirectories(pasta);
 
             Path destino = pasta.resolve(file.getOriginalFilename());
-            Files.copy(file.getInputStream(), destino, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(file.getInputStream(), destino, StandardCopyOption.REPLACE_EXISTING);
 
             return file.getOriginalFilename();
 
@@ -28,17 +26,12 @@ public class ImagemService {
     }
 
     public Path carregar(String nomeArquivo) {
-        try {
-            Path caminho = pasta.resolve(nomeArquivo);
+        Path caminho = pasta.resolve(nomeArquivo);
 
-            if (!Files.exists(caminho)) {
-                throw new RuntimeException("Arquivo não encontrado: " + nomeArquivo);
-            }
-
-            return caminho;
-
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao carregar imagem: " + e.getMessage());
+        if (!Files.exists(caminho)) {
+            throw new RuntimeException("Arquivo não encontrado: " + nomeArquivo);
         }
+
+        return caminho;
     }
 }
